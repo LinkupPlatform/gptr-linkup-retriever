@@ -1,0 +1,67 @@
+[project]
+authors = [{ email = "contact@linkup.so", name = "Linkup" }]
+classifiers = [
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+description = "A GPT Researcher retriever plugin for the Linkup API"
+keywords = ["api", "gpt-researcher", "integration", "linkup", "retriever", "search"]
+license = "MIT"
+name = "gptr-linkup-retriever"
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+version = "0.1.0"
+
+dependencies = ["gpt-researcher>=0.16.1", "linkup-sdk>=0.23.0"]
+
+[project.entry-points."gpt_researcher.retrievers"]
+linkup = "gptr_linkup_retriever:LinkupSearch"
+
+[dependency-groups]
+dev = ["mypy", "prek>=0.3.5", "pytest", "pytest-cov", "pytest-mock", "pytest-socket", "ruff"]
+
+[project.urls]
+Documentation = "https://github.com/LinkupPlatform/gptr-linkup-retriever#readme"
+Homepage = "https://www.linkup.so"
+Repository = "https://github.com/LinkupPlatform/gptr-linkup-retriever"
+Tracker = "https://github.com/LinkupPlatform/gptr-linkup-retriever/issues"
+
+[tool.mypy]
+exclude = ['^tests/']
+strict = true
+
+[[tool.mypy.overrides]]
+# gpt-researcher does not ship type information
+disallow_subclassing_any = false
+ignore_missing_imports = true
+module = ["gpt_researcher.*", "gptr_linkup_retriever.*"]
+
+[tool.coverage.report]
+exclude_also = ["raise TypeError", "raise ValueError"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+  "E", # pycodestyle
+  "F", # pyflakes
+  "I", # isort
+  "S", # flake8-bandit
+]
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/**/test_*.py" = ["S101"] # Use of assert detected
+
+[tool.hatch.build.targets.sdist]
+exclude = [".github", "uv.lock"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gptr_linkup_retriever"]
